@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import csv
 import pandas as pd
 import sqlalchemy
-from sqlalchemy import create_engine, Column, Integer, Float, String, or_, update, select
+from sqlalchemy import create_engine, Column, Integer, Float, String, or_, update, select, ForeignKey
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -21,13 +21,13 @@ class Journey(Base):
     end_year = Column(Integer)
     end_hour = Column(Integer)
     end_minute = Column(Integer)
-    end_station_id = Column(Integer)
+    end_station_id = Column(Integer, ForeignKey('station.station_id'))
     start_date = Column(Integer)
     start_month = Column(Integer)
     start_year = Column(Integer)
     start_hour = Column(Integer)
     start_minute = Column(Integer)
-    start_station_id = Column(Integer)
+    start_station_id = Column(Integer, ForeignKey('station.station_id'))
     
 class Station(Base):
     """Table for stations.csv file"""
