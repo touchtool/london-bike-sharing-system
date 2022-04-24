@@ -1,8 +1,6 @@
-from bicycle_table import engine
+from table.bicycle_table import engine
 from abc import ABC, abstractmethod
-
-from bicycle_table import Journey, Station
-
+from utility import *
 class ICreateDAO(ABC):
     @abstractmethod
     def get_query():
@@ -86,40 +84,13 @@ class FactoryDAO():
         self.creator = creator
 
     def find_all(self):
-        """
-        The client code works with an instance of a concrete creator, albeit through
-        its base interface. As long as the client keeps working with the creator via
-        the base interface, you can pass it any creator's subclass.
-        """
-
-        print(f"Client: I'm not aware of the creator's class, but it still works.\n"
-            f"{self.creator.get_query()}", end="")
+        return self.creator.get_query()
     
     def find_id(self, id):
-        print(self.creator.get_query_by_id(id))
-
+        return self.creator.get_query_by_id(id)
 
     def update_station_by_id(self, id, capacity=0, latitude=0, longitude=0, station_name=""):
         print(self.creator.update_station_by_id(id, capacity=capacity, latitude=latitude, longitude=longitude, station_name=station_name))
 
     def update_journey_by_id(self, id: int, journey_duration=0, end_date=0, end_month=0, end_year=0, end_hour=0, end_minute=0, end_station_id=0, start_date=0, start_month=0, start_year=0, start_hour=0, start_minute=0, start_station_id=0):
         print(self.creator.update_journey_by_id(id, journey_duration, end_date=end_date, end_month=end_month, end_year=end_year, end_hour=end_hour, end_minute=end_minute, end_station_id=end_station_id, start_date=start_date, start_month= start_month, start_year=start_year, start_hour=start_hour, start_minute=start_minute, start_station_id=start_station_id))
-
-JOURNEY_TABLE_NAME = Journey.__tablename__
-STATION_TABLE_NAME = Station.__tablename__
-
-query_journey = FactoryDAO(CreateJourneyDao)
-print()
-# result = query_journey.find_all()
-print()
-query_station = FactoryDAO(CreateStationDao)
-print()
-# result = query_station.find_all()
-print()
-result = query_journey.find_id(5)
-print()
-result = query_station.find_id(5)
-print()
-result = query_station.update_station_by_id(5, capacity=27)
-print()
-result = query_journey.update_journey_by_id(1, journey_duration=1020)
