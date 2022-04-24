@@ -1,0 +1,4 @@
+SQLAlchemy
+pandas
+tk
+sqlalchemy_utils
