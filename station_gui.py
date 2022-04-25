@@ -1,12 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 from utility import *
-# from table.bicycle_load import ProxyCreateTable
+
 from table.bicycle_dao import *
 
 root = tk.Tk()
 root.title("Bicycle sharing system")
-# create = ProxyCreateTable()
+
 width = root.winfo_screenwidth()
 height = root.winfo_screenheight()
 
@@ -80,6 +80,17 @@ station_name_label.grid(row=1, column=2, padx=10, pady=10)
 station_name = tk.Entry(data_frame, textvariable=str1)
 station_name.grid(row=1, column=3, padx=10, pady=10)
 
+def create_tree_record():
+	count = 0
+	records = create.get_query()
+	for record in records:
+		if count % 2 == 0:
+			my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4]), tags=('evenrow',))
+		else:
+			my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4]), tags=('oddrow',))
+		# increment counter
+		count += 1
+	root.update()
 
 def up():
 	rows = my_tree.selection()
@@ -137,8 +148,6 @@ def select_record(e):
 
 # Update record
 def update_record():
-	# Grab the record number
-	selected = my_tree.focus()
 	# Update record
 	find_record = create.get_query_by_id(station_id_entry.get())
 	if capcity_entry.get() == "":
@@ -149,10 +158,14 @@ def update_record():
 		num3.set(f"{find_record[0][3]}")
 	if station_name.get() == "":
 		str1.set(f"{find_record[0][4]}")
-	my_tree.item(selected, text="", values=(station_id_entry.get(), capcity_entry.get(), latitude_entry.get(), longitude_entry.get(), station_name.get()))
+	for item in my_tree.get_children():
+		my_tree.delete(item)
 	
 	create.update_station_by_id(station_id_entry.get(), capacity=int(capcity_entry.get()), latitude=float(latitude_entry.get()), longitude=float(longitude_entry.get()), station_name=str(station_name.get()))
+	create_tree_record()
+	root.update()
 	my_tree.see(station_id_entry.get())
+	my_tree.selection_toggle(int(station_id_entry.get())-1)
 	# Clear entry boxes
 	clear_entries()
 
@@ -192,14 +205,7 @@ move_down_button.grid(row=0, column=6, padx=10, pady=10)
 # Bind the treeview
 my_tree.bind("<Return>", select_record)
 
-count = 0
-records = create.get_query()
-for record in records:
-	if count % 2 == 0:
-		my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4]), tags=('evenrow',))
-	else:
-		my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4]), tags=('oddrow',))
-	# increment counter
-	count += 1
+
+create_tree_record()
 
 root.mainloop()

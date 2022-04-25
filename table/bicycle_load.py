@@ -2,8 +2,6 @@ from abc import ABC, abstractmethod
 import csv
 import pandas as pd
 import sqlalchemy
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import sessionmaker
 
 class ICreateTable(ABC):
    @abstractmethod
@@ -29,8 +27,6 @@ class ProxyCreateTable(ICreateTable):
     def __init__(self, engine):
         self.create = CreateTable()
         self.engine = engine
-        # self._engine = create_engine("sqlite:///lend_bicycle.db")
-        # self._sessionmake = sessionmaker(bind=self._engine)
 
     def load_data(self, file_name, columns, tablename):
         """
@@ -41,6 +37,3 @@ class ProxyCreateTable(ICreateTable):
             CreateTable.load_data(file_name=file_name, columns=columns, tablename=tablename, engine=self.engine)
         else:
             print(f"this {file_name} already have an information in the database")
-
-    # def get_engine(self):
-    #     return self._engine

@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from utility import *
-# from table.bicycle_load import ProxyCreateTable
+
 from table.bicycle_dao import *
 
 root = tk.Tk()
@@ -154,6 +154,17 @@ start_station_id_label.grid(row=1, column=2, padx=10, pady=10)
 start_station_id_entry = tk.Entry(data_frame, textvariable=num13)
 start_station_id_entry.grid(row=1, column=3, padx=10, pady=10)
 
+def create_tree_record():
+    count = 0
+    records = create.get_query()
+    for record in records:
+        if count % 2 == 0:
+            my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4], record[5], record[6], record[7], record[8], record[9], record[10], record[11], record[12], record[13]), tags=('evenrow',))
+        else:
+            my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4], record[5], record[6], record[7], record[8], record[9], record[10], record[11], record[12], record[13]), tags=('oddrow',))
+        # increment counter
+        count += 1
+
 def up():
 	rows = my_tree.selection()
 	for row in rows:
@@ -227,8 +238,6 @@ def select_record(e):
 
 # Update record
 def update_record():
-    # Grab the record number
-    selected = my_tree.focus()
 	# Update record
     find_record = create.get_query_by_id(journey_id_entry.get())
     if journey_duration_entry.get() == "":
@@ -259,10 +268,14 @@ def update_record():
         num13.set(f"{find_record[0][13]}")
     print(f"{find_record[0][3]}")
     print(f"{end_month_entry.get()}")
-    my_tree.item(selected, text="", values=(journey_id_entry.get(), journey_duration_entry.get(), end_date_entry.get(), end_month_entry.get(), end_year_entry.get(), end_hour_entry.get(), end_minute_entry.get(), end_station_id_entry.get(), start_date_entry.get(), start_month_entry.get(), start_year_entry.get(), start_hour_entry.get(), start_minute_entry.get(), start_station_id_entry.get()))
+    for item in my_tree.get_children():
+        my_tree.delete(item)
     
     create.update_journey_by_id(journey_id_entry.get(), journey_duration=int(journey_duration_entry.get()), end_date=int(end_date_entry.get()), end_month=int(end_month_entry.get()), end_year=int(end_year_entry.get()), end_hour=int(end_hour_entry.get()), end_minute=int(end_minute_entry.get()), end_station_id=int(end_station_id_entry.get()), start_date=int(start_date_entry.get()), start_month=int(start_month_entry.get()), start_year=int(start_year_entry.get()), start_hour=int(start_hour_entry.get()), start_minute=int(start_minute_entry.get()), start_station_id=int(start_station_id_entry.get()))
-    
+    create_tree_record()
+    root.update()
+    my_tree.see(journey_id_entry.get())
+    my_tree.selection_toggle(int(journey_id_entry.get())-1)
     # Clear entry boxes
     clear_entries()
 
@@ -301,14 +314,6 @@ move_down_button.grid(row=0, column=6, padx=10, pady=10)
 # Bind the treeview
 my_tree.bind("<Return>", select_record)
 
-count = 0
-records = create.get_query()
-for record in records:
-	if count % 2 == 0:
-		my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4], record[5], record[6], record[7], record[8], record[9], record[10], record[11], record[12], record[13]), tags=('evenrow',))
-	else:
-		my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4], record[5], record[6], record[7], record[8], record[9], record[10], record[11], record[12], record[13]), tags=('oddrow',))
-	# increment counter
-	count += 1
+create_tree_record()
 
 root.mainloop()
