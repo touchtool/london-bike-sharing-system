@@ -97,7 +97,7 @@ class FactoryDAO():
     def __init__(self, type: str):
         self._engine = create_engine("sqlite:///lend_bicycle.db")
         self._sessionmake = sessionmaker(bind=self._engine)
-        self.create_record = ProxyCreateTable(self._engine)
+        self._create_record = ProxyCreateTable(self._engine)
         self.type = type
 
     def get_create_dao(self):
@@ -107,4 +107,4 @@ class FactoryDAO():
             return CreateStationDao(self._engine)
 
     def load_data(self, file_name, columns, tablename):
-        self.create_record.load_data(file_name, columns, tablename)
+        self._create_record.load_data(file_name, columns, tablename)
