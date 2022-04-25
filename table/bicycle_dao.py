@@ -1,6 +1,10 @@
-from table.bicycle_table import engine
+from table.bicycle_load import ProxyCreateTable
 from abc import ABC, abstractmethod
 from utility import *
+
+create = ProxyCreateTable()
+engine = create.get_engine()
+
 class ICreateDAO(ABC):
     @abstractmethod
     def get_query():
@@ -81,7 +85,7 @@ class CreateJourneyDao(ICreateDAO):
 
 class FactoryDAO():
     def __init__(self, creator: ICreateDAO):
-        self.creator = creator
+        self.creator = creator   
 
     def find_all(self):
         return self.creator.get_query()

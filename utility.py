@@ -1,4 +1,5 @@
-from table.bicycle_table import Journey, Station
+from models.journey_table import Journey
+from models.station_table import Station
 PATH_JOURNEY_CSV = "data/journeys.csv"
 PATH_STATION_CSV = "data/stations.csv"
 

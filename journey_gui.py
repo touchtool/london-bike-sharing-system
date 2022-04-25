@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from utility import *
-from table.bicycle_table import ProxyCreateTable
+from table.bicycle_load import ProxyCreateTable
 from table.bicycle_dao import *
 
 root = tk.Tk()
@@ -201,20 +201,7 @@ def clear_entries():
 # Select Record
 def select_record(e):
 	# Clear entry boxes
-    journey_id_entry.delete(0, tk.END)
-    journey_duration_entry.delete(0, tk.END)
-    end_date_entry.delete(0, tk.END)
-    end_month_entry.delete(0, tk.END)
-    end_year_entry.delete(0, tk.END)
-    end_hour_entry.delete(0, tk.END)
-    end_minute_entry.delete(0, tk.END)
-    end_station_id_entry.delete(0, tk.END)
-    start_date_entry.delete(0, tk.END)
-    start_month_entry.delete(0, tk.END)
-    start_year_entry.delete(0, tk.END)
-    start_hour_entry.delete(0, tk.END)
-    start_minute_entry.delete(0, tk.END)
-    start_station_id_entry.delete(0, tk.END)
+    clear_entries()
 
 	# Grab record Number
     selected = my_tree.focus()
@@ -276,20 +263,7 @@ def update_record():
     create_record.update_journey_by_id(journey_id_entry.get(), journey_duration=int(journey_duration_entry.get()), end_date=int(end_date_entry.get()), end_month=int(end_month_entry.get()), end_year=int(end_year_entry.get()), end_hour=int(end_hour_entry.get()), end_minute=int(end_minute_entry.get()), end_station_id=int(end_station_id_entry.get()), start_date=int(start_date_entry.get()), start_month=int(start_month_entry.get()), start_year=int(start_year_entry.get()), start_hour=int(start_hour_entry.get()), start_minute=int(start_minute_entry.get()), start_station_id=int(start_station_id_entry.get()))
     
     # Clear entry boxes
-    journey_id_entry.delete(0, tk.END)
-    journey_duration_entry.delete(0, tk.END)
-    end_date_entry.delete(0, tk.END)
-    end_month_entry.delete(0, tk.END)
-    end_year_entry.delete(0, tk.END)
-    end_hour_entry.delete(0, tk.END)
-    end_minute_entry.delete(0, tk.END)
-    end_station_id_entry.delete(0, tk.END)
-    start_date_entry.delete(0, tk.END)
-    start_month_entry.delete(0, tk.END)
-    start_year_entry.delete(0, tk.END)
-    start_hour_entry.delete(0, tk.END)
-    start_minute_entry.delete(0, tk.END)
-    start_station_id_entry.delete(0, tk.END)
+    clear_entries()
 
 #Search
 def searh():

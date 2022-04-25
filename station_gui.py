@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from utility import *
-from table.bicycle_table import ProxyCreateTable
+from table.bicycle_load import ProxyCreateTable
 from table.bicycle_dao import *
 
 root = tk.Tk()
@@ -118,11 +118,7 @@ def clear_entries():
 # Select Record
 def select_record(e):
 	# Clear entry boxes
-	station_id_entry.delete(0, tk.END)
-	capcity_entry.delete(0, tk.END)
-	latitude_entry.delete(0, tk.END)
-	longitude_entry.delete(0, tk.END)
-	station_name.delete(0, tk.END)
+	clear_entries()
 
 	# Grab record Number
 	selected = my_tree.focus()
@@ -155,11 +151,7 @@ def update_record():
     create_record.update_station_by_id(station_id_entry.get(), capacity=int(capcity_entry.get()), latitude=float(latitude_entry.get()), longitude=float(longitude_entry.get()), station_name=str(station_name.get()))
     
     # Clear entry boxes
-    station_id_entry.delete(0, tk.END)
-    capcity_entry.delete(0, tk.END)
-    latitude_entry.delete(0, tk.END)
-    longitude_entry.delete(0, tk.END)
-    station_name.delete(0, tk.END)
+    clear_entries()
 
 #Search
 def searh():
