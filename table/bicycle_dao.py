@@ -39,7 +39,7 @@ class CreateStationDao(ICreateDAO):
             station_name = query[0][4]
         self.engine.execute(f"UPDATE {STATION_TABLE_NAME} SET capacity={capacity}, latitude={latitude}, longitude={longitude}, station_name='{station_name}' WHERE station_id={id}")
         updated_query = self.engine.execute(f"SELECT * FROM {STATION_TABLE_NAME} WHERE station_id={id}").fetchall()
-        return f"Success to update \n {query[0]} \n change to \n {updated_query[0]}"
+        print(f"Success to update \n {query[0]} \n change to \n {updated_query[0]}")
     
     def __str__(self) -> str:
         return STATION_TABLE_NAME
@@ -88,7 +88,7 @@ class CreateJourneyDao(ICreateDAO):
                         start_hour={start_hour}, start_minute={start_minute}, start_station_id={start_station_id}    \
                         WHERE journey_id={id}")
         updated_query = self.engine.execute(f"SELECT * FROM {JOURNEY_TABLE_NAME} WHERE journey_id={id}").fetchall()
-        return f"Success to update \n {query[0]} \n change to \n {updated_query[0]}"
+        print(f"Success to update \n {query[0]} \n change to \n {updated_query[0]}")
     
     def __str__(self) -> str:
         return JOURNEY_TABLE_NAME
