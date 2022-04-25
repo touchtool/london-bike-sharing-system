@@ -1,4 +1,3 @@
-from table.bicycle_load import ProxyCreateTable
 from abc import ABC, abstractmethod
 from utility import *
 
