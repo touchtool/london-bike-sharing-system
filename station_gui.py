@@ -135,30 +135,36 @@ def select_record(e):
 
 # Update record
 def update_record():
-    # Grab the record number
-    selected = my_tree.focus()
+	# Grab the record number
+	selected = my_tree.focus()
 	# Update record
-    find_record = create_record.find_id(station_id_entry.get())
-    if capcity_entry.get() == "":
-        num1.set(f"{find_record[0][1]}")
-    if latitude_entry.get() == "":
-        num2.set(f"{find_record[0][2]}")
-    if longitude_entry.get() == "":
-        num3.set(f"{find_record[0][3]}")
-    if station_name.get() == "":
-        str1.set(f"{find_record[0][4]}")
-    my_tree.item(selected, text="", values=(station_id_entry.get(), capcity_entry.get(), latitude_entry.get(), longitude_entry.get(), station_name.get()))
+	find_record = create_record.find_id(station_id_entry.get())
+	if capcity_entry.get() == "":
+		num1.set(f"{find_record[0][1]}")
+	if latitude_entry.get() == "":
+		num2.set(f"{find_record[0][2]}")
+	if longitude_entry.get() == "":
+		num3.set(f"{find_record[0][3]}")
+	if station_name.get() == "":
+		str1.set(f"{find_record[0][4]}")
+	my_tree.item(selected, text="", values=(station_id_entry.get(), capcity_entry.get(), latitude_entry.get(), longitude_entry.get(), station_name.get()))
 	
-    create_record.update_station_by_id(station_id_entry.get(), capacity=int(capcity_entry.get()), latitude=float(latitude_entry.get()), longitude=float(longitude_entry.get()), station_name=str(station_name.get()))
-    
-    # Clear entry boxes
-    clear_entries()
+	create_record.update_station_by_id(station_id_entry.get(), capacity=int(capcity_entry.get()), latitude=float(latitude_entry.get()), longitude=float(longitude_entry.get()), station_name=str(station_name.get()))
+	my_tree.see(station_id_entry.get())
+	# Clear entry boxes
+	clear_entries()
 
 #Search
+prev = None
+
 def searh():
-    find_id = create_record.find_id(int(station_id_entry.get()))
-    find_label = tk.Label(search_frame, text=f"{find_id[0]}")
-    find_label.grid(row=0, column=5, padx=10, pady=10)
+	global prev
+	if prev is not None:
+		my_tree.selection_toggle(prev)
+	my_tree.see(station_id_entry.get())
+	my_tree.move(station_id_entry.get(), my_tree.parent(station_id_entry.get()), my_tree.index(int(station_id_entry.get())-1))
+	my_tree.selection_toggle(int(station_id_entry.get())-1)
+	prev = int(station_id_entry.get())-1
 
 search_frame = tk.LabelFrame(root, text="Search")
 search_frame.pack(fill="x", expand="yes", padx=20)

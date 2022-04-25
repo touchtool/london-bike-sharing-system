@@ -267,10 +267,15 @@ def update_record():
     clear_entries()
 
 #Search
+prev = None
 def searh():
-    find_id = create_record.find_id(int(journey_id_entry.get()))
-    find_label = tk.Label(search_frame, text=f"{find_id[0]}")
-    find_label.grid(row=0, column=5, padx=10, pady=10)
+    global prev
+    if prev is not None:
+        my_tree.selection_toggle(prev)
+    my_tree.see(journey_id_entry.get())
+    my_tree.move(journey_id_entry.get(), my_tree.parent(journey_id_entry.get()), my_tree.index(int(journey_id_entry.get())-1))
+    my_tree.selection_toggle(int(journey_id_entry.get())-1)
+    prev = int(journey_id_entry.get())-1
 
 search_frame = tk.LabelFrame(root, text="Search")
 search_frame.pack(fill="x", expand="yes", padx=20)
