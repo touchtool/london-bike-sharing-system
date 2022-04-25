@@ -161,7 +161,7 @@ def update_record():
 	for item in my_tree.get_children():
 		my_tree.delete(item)
 	
-	create.update_station_by_id(station_id_entry.get(), capacity=int(capcity_entry.get()), latitude=float(latitude_entry.get()), longitude=float(longitude_entry.get()), station_name=str(station_name.get()))
+	create.update_by_id(station_id_entry.get(), capacity=int(capcity_entry.get()), latitude=float(latitude_entry.get()), longitude=float(longitude_entry.get()), station_name=str(station_name.get()))
 	create_tree_record()
 	root.update()
 	my_tree.see(station_id_entry.get())

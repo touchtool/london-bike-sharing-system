@@ -266,12 +266,11 @@ def update_record():
         num12.set(f"{find_record[0][12]}")
     if start_station_id_entry.get() == "":
         num13.set(f"{find_record[0][13]}")
-    print(f"{find_record[0][3]}")
-    print(f"{end_month_entry.get()}")
+
     for item in my_tree.get_children():
         my_tree.delete(item)
     
-    create.update_journey_by_id(journey_id_entry.get(), journey_duration=int(journey_duration_entry.get()), end_date=int(end_date_entry.get()), end_month=int(end_month_entry.get()), end_year=int(end_year_entry.get()), end_hour=int(end_hour_entry.get()), end_minute=int(end_minute_entry.get()), end_station_id=int(end_station_id_entry.get()), start_date=int(start_date_entry.get()), start_month=int(start_month_entry.get()), start_year=int(start_year_entry.get()), start_hour=int(start_hour_entry.get()), start_minute=int(start_minute_entry.get()), start_station_id=int(start_station_id_entry.get()))
+    create.update_by_id(journey_id_entry.get(), journey_duration=int(journey_duration_entry.get()), end_date=int(end_date_entry.get()), end_month=int(end_month_entry.get()), end_year=int(end_year_entry.get()), end_hour=int(end_hour_entry.get()), end_minute=int(end_minute_entry.get()), end_station_id=int(end_station_id_entry.get()), start_date=int(start_date_entry.get()), start_month=int(start_month_entry.get()), start_year=int(start_year_entry.get()), start_hour=int(start_hour_entry.get()), start_minute=int(start_minute_entry.get()), start_station_id=int(start_station_id_entry.get()))
     create_tree_record()
     root.update()
     my_tree.see(journey_id_entry.get())

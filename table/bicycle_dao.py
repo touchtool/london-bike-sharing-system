@@ -16,6 +16,9 @@ class ICreateDAO(ABC):
     def get_query_by_id(self, id: int):
         pass
 
+    @abstractmethod
+    def update_by_id(self):
+        pass
 
 class CreateStationDao(ICreateDAO):
     def get_query(self):
@@ -24,7 +27,7 @@ class CreateStationDao(ICreateDAO):
     def get_query_by_id(self, id: int):
         return self.engine.execute(f"SELECT * FROM {STATION_TABLE_NAME} WHERE station_id={id}").fetchall()
 
-    def update_station_by_id(self, id: int, capacity=0, latitude=0, longitude=0, station_name=""):
+    def update_by_id(self, id: int, capacity=0, latitude=0, longitude=0, station_name=""):
         query = CreateStationDao.get_query_by_id(self, id)
         if capacity == 0:
             capacity = query[0][1]
@@ -49,7 +52,7 @@ class CreateJourneyDao(ICreateDAO):
     def get_query_by_id(self, id: int):
         return self.engine.execute(f"SELECT * FROM {JOURNEY_TABLE_NAME} WHERE journey_id={id}").fetchall()
 
-    def update_journey_by_id(self, id: int, journey_duration=0, end_date=0, end_month=0, end_year=0, end_hour=0, end_minute=0, end_station_id=0, start_date=0, start_month=0, start_year=0, start_hour=0, start_minute=0,	start_station_id=0):
+    def update_by_id(self, id: int, journey_duration=0, end_date=0, end_month=0, end_year=0, end_hour=0, end_minute=0, end_station_id=0, start_date=0, start_month=0, start_year=0, start_hour=0, start_minute=0,	start_station_id=0):
         query = CreateJourneyDao.get_query_by_id(self, id)
         if journey_duration == 0:
             journey_duration = query[0][1]
@@ -105,6 +108,3 @@ class FactoryDAO():
 
     def load_data(self, file_name, columns, tablename):
         self.create_record.load_data(file_name, columns, tablename)
-
-    def get_engine(self):
-        return self._engine
