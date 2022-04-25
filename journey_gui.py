@@ -1,17 +1,19 @@
 import tkinter as tk
 from tkinter import ttk
 from utility import *
-from table.bicycle_load import ProxyCreateTable
+# from table.bicycle_load import ProxyCreateTable
 from table.bicycle_dao import *
 
 root = tk.Tk()
 width = root.winfo_screenwidth()
 height = root.winfo_screenheight()
 root.title("Bicycle sharing system")
-create = ProxyCreateTable()
-create.load_data(file_name=PATH_JOURNEY_CSV, columns=JOURNEY_COLUMN, tablename=JOURNEY_TABLE_NAME)
-create.load_data(file_name=PATH_STATION_CSV, columns=STATION_COLUMN, tablename=STATION_TABLE_NAME)
-engine = create.get_engine()
+
+create_record = FactoryDAO(JOURNEY_TABLE_NAME)
+create_record.load_data(file_name=PATH_JOURNEY_CSV, columns=JOURNEY_COLUMN, tablename=JOURNEY_TABLE_NAME)
+create_record.load_data(file_name=PATH_STATION_CSV, columns=STATION_COLUMN, tablename=STATION_TABLE_NAME)
+create = create_record.get_create_dao()
+
 root.geometry(f"{width}x{height}")
 style = ttk.Style()
 style.theme_use('default')
@@ -152,8 +154,6 @@ start_station_id_label.grid(row=1, column=2, padx=10, pady=10)
 start_station_id_entry = tk.Entry(data_frame, textvariable=num13)
 start_station_id_entry.grid(row=1, column=3, padx=10, pady=10)
 
-create_record = FactoryDAO(CreateJourneyDao(engine=engine))
-
 def up():
 	rows = my_tree.selection()
 	for row in rows:
@@ -230,7 +230,7 @@ def update_record():
     # Grab the record number
     selected = my_tree.focus()
 	# Update record
-    find_record = create_record.find_id(journey_id_entry.get())
+    find_record = create.get_query_by_id(journey_id_entry.get())
     if journey_duration_entry.get() == "":
         num1.set(f"{find_record[0][1]}")
     if end_date_entry.get() == "":
@@ -261,7 +261,7 @@ def update_record():
     print(f"{end_month_entry.get()}")
     my_tree.item(selected, text="", values=(journey_id_entry.get(), journey_duration_entry.get(), end_date_entry.get(), end_month_entry.get(), end_year_entry.get(), end_hour_entry.get(), end_minute_entry.get(), end_station_id_entry.get(), start_date_entry.get(), start_month_entry.get(), start_year_entry.get(), start_hour_entry.get(), start_minute_entry.get(), start_station_id_entry.get()))
     
-    create_record.update_journey_by_id(journey_id_entry.get(), journey_duration=int(journey_duration_entry.get()), end_date=int(end_date_entry.get()), end_month=int(end_month_entry.get()), end_year=int(end_year_entry.get()), end_hour=int(end_hour_entry.get()), end_minute=int(end_minute_entry.get()), end_station_id=int(end_station_id_entry.get()), start_date=int(start_date_entry.get()), start_month=int(start_month_entry.get()), start_year=int(start_year_entry.get()), start_hour=int(start_hour_entry.get()), start_minute=int(start_minute_entry.get()), start_station_id=int(start_station_id_entry.get()))
+    create.update_journey_by_id(journey_id_entry.get(), journey_duration=int(journey_duration_entry.get()), end_date=int(end_date_entry.get()), end_month=int(end_month_entry.get()), end_year=int(end_year_entry.get()), end_hour=int(end_hour_entry.get()), end_minute=int(end_minute_entry.get()), end_station_id=int(end_station_id_entry.get()), start_date=int(start_date_entry.get()), start_month=int(start_month_entry.get()), start_year=int(start_year_entry.get()), start_hour=int(start_hour_entry.get()), start_minute=int(start_minute_entry.get()), start_station_id=int(start_station_id_entry.get()))
     
     # Clear entry boxes
     clear_entries()
@@ -276,7 +276,7 @@ def searh():
     my_tree.move(journey_id_entry.get(), my_tree.parent(journey_id_entry.get()), my_tree.index(int(journey_id_entry.get())-1))
     my_tree.selection_toggle(int(journey_id_entry.get())-1)
     prev = int(journey_id_entry.get())-1
-    find_id = create_record.find_id(int(journey_id_entry.get()))
+    find_id = create.get_query_by_id(int(journey_id_entry.get()))
     find_label = tk.Label(search_frame, text=f"{find_id[0]}")
     find_label.grid(row=0, column=5, padx=10, pady=10)
 
@@ -302,7 +302,7 @@ move_down_button.grid(row=0, column=6, padx=10, pady=10)
 my_tree.bind("<Return>", select_record)
 
 count = 0
-records = create_record.find_all()
+records = create.get_query()
 for record in records:
 	if count % 2 == 0:
 		my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4], record[5], record[6], record[7], record[8], record[9], record[10], record[11], record[12], record[13]), tags=('evenrow',))

@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
 from utility import *
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from table.bicycle_load import ProxyCreateTable
 
 class ICreateDAO(ABC):
     def __init__(self, engine):
@@ -34,6 +37,10 @@ class CreateStationDao(ICreateDAO):
         self.engine.execute(f"UPDATE {STATION_TABLE_NAME} SET capacity={capacity}, latitude={latitude}, longitude={longitude}, station_name='{station_name}' WHERE station_id={id}")
         updated_query = self.engine.execute(f"SELECT * FROM {STATION_TABLE_NAME} WHERE station_id={id}").fetchall()
         return f"Success to update \n {query[0]} \n change to \n {updated_query[0]}"
+    
+    def __str__(self) -> str:
+        return STATION_TABLE_NAME
+
 
 class CreateJourneyDao(ICreateDAO):
     def get_query(self):
@@ -80,19 +87,24 @@ class CreateJourneyDao(ICreateDAO):
         updated_query = self.engine.execute(f"SELECT * FROM {JOURNEY_TABLE_NAME} WHERE journey_id={id}").fetchall()
         return f"Success to update \n {query[0]} \n change to \n {updated_query[0]}"
     
+    def __str__(self) -> str:
+        return JOURNEY_TABLE_NAME
 
 class FactoryDAO():
-    def __init__(self, creator: ICreateDAO):
-        self.creator = creator   
+    def __init__(self, type: str):
+        self._engine = create_engine("sqlite:///lend_bicycle.db")
+        self._sessionmake = sessionmaker(bind=self._engine)
+        self.create_record = ProxyCreateTable(self._engine)
+        self.type = type
 
-    def find_all(self):
-        return self.creator.get_query()
-    
-    def find_id(self, id):
-        return self.creator.get_query_by_id(id)
+    def get_create_dao(self):
+        if (self.type == JOURNEY_TABLE_NAME):
+            return CreateJourneyDao(self._engine)
+        elif (self.type == STATION_TABLE_NAME):
+            return CreateStationDao(self._engine)
 
-    def update_station_by_id(self, id, capacity=0, latitude=0, longitude=0, station_name=""):
-        print(self.creator.update_station_by_id(id, capacity=capacity, latitude=latitude, longitude=longitude, station_name=station_name))
+    def load_data(self, file_name, columns, tablename):
+        self.create_record.load_data(file_name, columns, tablename)
 
-    def update_journey_by_id(self, id: int, journey_duration=0, end_date=0, end_month=0, end_year=0, end_hour=0, end_minute=0, end_station_id=0, start_date=0, start_month=0, start_year=0, start_hour=0, start_minute=0, start_station_id=0):
-        print(self.creator.update_journey_by_id(id, journey_duration, end_date=end_date, end_month=end_month, end_year=end_year, end_hour=end_hour, end_minute=end_minute, end_station_id=end_station_id, start_date=start_date, start_month= start_month, start_year=start_year, start_hour=start_hour, start_minute=start_minute, start_station_id=start_station_id))
+    def get_engine(self):
+        return self._engine

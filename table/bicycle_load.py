@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 import csv
 import pandas as pd
 import sqlalchemy
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+# from sqlalchemy import create_engine
+# from sqlalchemy.orm import sessionmaker
 
 class ICreateTable(ABC):
    @abstractmethod
@@ -26,20 +26,21 @@ class CreateTable(ICreateTable):
 
 
 class ProxyCreateTable(ICreateTable):
-    def __init__(self):
+    def __init__(self, engine):
         self.create = CreateTable()
-        self._engine = create_engine("sqlite:///lend_bicycle.db")
-        self._sessionmake = sessionmaker(bind=self._engine)
+        self.engine = engine
+        # self._engine = create_engine("sqlite:///lend_bicycle.db")
+        # self._sessionmake = sessionmaker(bind=self._engine)
 
     def load_data(self, file_name, columns, tablename):
         """
         Insert data from csv file to database if the file is not in the table
         """
-        inspect = sqlalchemy.inspect(self._engine)
+        inspect = sqlalchemy.inspect(self.engine)
         if not inspect.has_table(tablename, schema=None):
-            CreateTable.load_data(file_name=file_name, columns=columns, tablename=tablename, engine=self._engine)
+            CreateTable.load_data(file_name=file_name, columns=columns, tablename=tablename, engine=self.engine)
         else:
             print(f"this {file_name} already have an information in the database")
 
-    def get_engine(self):
-        return self._engine
+    # def get_engine(self):
+    #     return self._engine

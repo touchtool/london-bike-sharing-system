@@ -1,18 +1,20 @@
 import tkinter as tk
 from tkinter import ttk
 from utility import *
-from table.bicycle_load import ProxyCreateTable
+# from table.bicycle_load import ProxyCreateTable
 from table.bicycle_dao import *
 
 root = tk.Tk()
 root.title("Bicycle sharing system")
-create = ProxyCreateTable()
+# create = ProxyCreateTable()
 width = root.winfo_screenwidth()
 height = root.winfo_screenheight()
 
-create.load_data(file_name=PATH_JOURNEY_CSV, columns=JOURNEY_COLUMN, tablename=JOURNEY_TABLE_NAME)
-create.load_data(file_name=PATH_STATION_CSV, columns=STATION_COLUMN, tablename=STATION_TABLE_NAME)
-engine = create.get_engine()
+create_record = FactoryDAO(STATION_TABLE_NAME)
+create_record.load_data(file_name=PATH_JOURNEY_CSV, columns=JOURNEY_COLUMN, tablename=JOURNEY_TABLE_NAME)
+create_record.load_data(file_name=PATH_STATION_CSV, columns=STATION_COLUMN, tablename=STATION_TABLE_NAME)
+create = create_record.get_create_dao()
+
 root.geometry(f"{width}x{height}")
 style = ttk.Style()
 style.theme_use('default')
@@ -77,7 +79,7 @@ station_name_label = tk.Label(data_frame, text=f"{STATION_COLUMN[4]}")
 station_name_label.grid(row=1, column=2, padx=10, pady=10)
 station_name = tk.Entry(data_frame, textvariable=str1)
 station_name.grid(row=1, column=3, padx=10, pady=10)
-create_record = FactoryDAO(CreateStationDao(engine=engine))
+
 
 def up():
 	rows = my_tree.selection()
@@ -138,7 +140,7 @@ def update_record():
 	# Grab the record number
 	selected = my_tree.focus()
 	# Update record
-	find_record = create_record.find_id(station_id_entry.get())
+	find_record = create.get_query_by_id(station_id_entry.get())
 	if capcity_entry.get() == "":
 		num1.set(f"{find_record[0][1]}")
 	if latitude_entry.get() == "":
@@ -149,7 +151,7 @@ def update_record():
 		str1.set(f"{find_record[0][4]}")
 	my_tree.item(selected, text="", values=(station_id_entry.get(), capcity_entry.get(), latitude_entry.get(), longitude_entry.get(), station_name.get()))
 	
-	create_record.update_station_by_id(station_id_entry.get(), capacity=int(capcity_entry.get()), latitude=float(latitude_entry.get()), longitude=float(longitude_entry.get()), station_name=str(station_name.get()))
+	create.update_station_by_id(station_id_entry.get(), capacity=int(capcity_entry.get()), latitude=float(latitude_entry.get()), longitude=float(longitude_entry.get()), station_name=str(station_name.get()))
 	my_tree.see(station_id_entry.get())
 	# Clear entry boxes
 	clear_entries()
@@ -165,7 +167,7 @@ def searh():
 	my_tree.move(station_id_entry.get(), my_tree.parent(station_id_entry.get()), my_tree.index(int(station_id_entry.get())-1))
 	my_tree.selection_toggle(int(station_id_entry.get())-1)
 	prev = int(station_id_entry.get())-1
-	find_id = create_record.find_id(int(station_id_entry.get()))
+	find_id = create.get_query_by_id(int(station_id_entry.get()))
 	find_label = tk.Label(search_frame, text=f"{find_id[0]}")
 	find_label.grid(row=0, column=5, padx=10, pady=10)
 
@@ -191,7 +193,7 @@ move_down_button.grid(row=0, column=6, padx=10, pady=10)
 my_tree.bind("<Return>", select_record)
 
 count = 0
-records = create_record.find_all()
+records = create.get_query()
 for record in records:
 	if count % 2 == 0:
 		my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4]), tags=('evenrow',))
