@@ -12,6 +12,7 @@ height = root.winfo_screenheight()
 
 create.load_data(file_name=PATH_JOURNEY_CSV, columns=JOURNEY_COLUMN, tablename=JOURNEY_TABLE_NAME)
 create.load_data(file_name=PATH_STATION_CSV, columns=STATION_COLUMN, tablename=STATION_TABLE_NAME)
+engine = create.get_engine()
 root.geometry(f"{width}x{height}")
 style = ttk.Style()
 style.theme_use('default')
@@ -76,7 +77,7 @@ station_name_label = tk.Label(data_frame, text=f"{STATION_COLUMN[4]}")
 station_name_label.grid(row=1, column=2, padx=10, pady=10)
 station_name = tk.Entry(data_frame, textvariable=str1)
 station_name.grid(row=1, column=3, padx=10, pady=10)
-create_record = FactoryDAO(CreateStationDao)
+create_record = FactoryDAO(CreateStationDao(engine=engine))
 
 def up():
 	rows = my_tree.selection()

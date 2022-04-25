@@ -2,28 +2,28 @@ from table.bicycle_load import ProxyCreateTable
 from abc import ABC, abstractmethod
 from utility import *
 
-create = ProxyCreateTable()
-engine = create.get_engine()
-
 class ICreateDAO(ABC):
+    def __init__(self, engine):
+        self.engine = engine
+
     @abstractmethod
-    def get_query():
+    def get_query(self):
         pass
 
     @abstractmethod
-    def get_query_by_id(id: int):
+    def get_query_by_id(self, id: int):
         pass
 
 
 class CreateStationDao(ICreateDAO):
-    def get_query():
-        return engine.execute(f"SELECT * FROM {STATION_TABLE_NAME}").fetchall()
+    def get_query(self):
+        return self.engine.execute(f"SELECT * FROM {STATION_TABLE_NAME}").fetchall()
 
-    def get_query_by_id(id: int):
-        return engine.execute(f"SELECT * FROM {STATION_TABLE_NAME} WHERE station_id={id}").fetchall()
+    def get_query_by_id(self, id: int):
+        return self.engine.execute(f"SELECT * FROM {STATION_TABLE_NAME} WHERE station_id={id}").fetchall()
 
-    def update_station_by_id(id: int, capacity=0, latitude=0, longitude=0, station_name=""):
-        query = CreateStationDao.get_query_by_id(id)
+    def update_station_by_id(self, id: int, capacity=0, latitude=0, longitude=0, station_name=""):
+        query = CreateStationDao.get_query_by_id(self, id)
         if capacity == 0:
             capacity = query[0][1]
         if latitude == 0:
@@ -32,20 +32,19 @@ class CreateStationDao(ICreateDAO):
             longitude = query[0][3]
         if station_name == "":
             station_name = query[0][4]
-        engine.execute(f"UPDATE {STATION_TABLE_NAME} SET capacity={capacity}, latitude={latitude}, longitude={longitude}, station_name='{station_name}' WHERE station_id={id}")
-        updated_query = engine.execute(f"SELECT * FROM {STATION_TABLE_NAME} WHERE station_id={id}").fetchall()
+        self.engine.execute(f"UPDATE {STATION_TABLE_NAME} SET capacity={capacity}, latitude={latitude}, longitude={longitude}, station_name='{station_name}' WHERE station_id={id}")
+        updated_query = self.engine.execute(f"SELECT * FROM {STATION_TABLE_NAME} WHERE station_id={id}").fetchall()
         return f"Success to update \n {query[0]} \n change to \n {updated_query[0]}"
 
 class CreateJourneyDao(ICreateDAO):
-    def get_query():
-        return engine.execute(f"SELECT * FROM {JOURNEY_TABLE_NAME}").fetchall()
+    def get_query(self):
+        return self.engine.execute(f"SELECT * FROM {JOURNEY_TABLE_NAME}").fetchall()
 
-    def get_query_by_id(id: int):
-        return engine.execute(f"SELECT * FROM {JOURNEY_TABLE_NAME} WHERE journey_id={id}").fetchall()
+    def get_query_by_id(self, id: int):
+        return self.engine.execute(f"SELECT * FROM {JOURNEY_TABLE_NAME} WHERE journey_id={id}").fetchall()
 
-    def update_journey_by_id(id: int, journey_duration=0, end_date=0, end_month=0, end_year=0, end_hour=0, end_minute=0, end_station_id=0, start_date=0, start_month=0, start_year=0, start_hour=0, start_minute=0,	start_station_id=0):
-        query = CreateJourneyDao.get_query_by_id(id)
-        print(query)
+    def update_journey_by_id(self, id: int, journey_duration=0, end_date=0, end_month=0, end_year=0, end_hour=0, end_minute=0, end_station_id=0, start_date=0, start_month=0, start_year=0, start_hour=0, start_minute=0,	start_station_id=0):
+        query = CreateJourneyDao.get_query_by_id(self, id)
         if journey_duration == 0:
             journey_duration = query[0][1]
         if end_date == 0:
@@ -73,13 +72,13 @@ class CreateJourneyDao(ICreateDAO):
         if start_station_id == 0:
             start_station_id = query[0][13]
         
-        engine.execute(f"UPDATE {JOURNEY_TABLE_NAME} SET journey_duration={journey_duration}, \
+        self.engine.execute(f"UPDATE {JOURNEY_TABLE_NAME} SET journey_duration={journey_duration}, \
                         end_date={end_date}, end_month={end_month}, end_year={end_year}, \
                         end_hour={end_hour}, end_minute={end_minute}, end_station_id={end_station_id}, \
                         start_date={start_date}, start_month={start_month}, start_year={start_year}, \
                         start_hour={start_hour}, start_minute={start_minute}, start_station_id={start_station_id}    \
                         WHERE journey_id={id}")
-        updated_query = engine.execute(f"SELECT * FROM {JOURNEY_TABLE_NAME} WHERE journey_id={id}").fetchall()
+        updated_query = self.engine.execute(f"SELECT * FROM {JOURNEY_TABLE_NAME} WHERE journey_id={id}").fetchall()
         return f"Success to update \n {query[0]} \n change to \n {updated_query[0]}"
     
 

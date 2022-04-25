@@ -11,6 +11,7 @@ root.title("Bicycle sharing system")
 create = ProxyCreateTable()
 create.load_data(file_name=PATH_JOURNEY_CSV, columns=JOURNEY_COLUMN, tablename=JOURNEY_TABLE_NAME)
 create.load_data(file_name=PATH_STATION_CSV, columns=STATION_COLUMN, tablename=STATION_TABLE_NAME)
+engine = create.get_engine()
 root.geometry(f"{width}x{height}")
 style = ttk.Style()
 style.theme_use('default')
@@ -151,7 +152,7 @@ start_station_id_label.grid(row=1, column=2, padx=10, pady=10)
 start_station_id_entry = tk.Entry(data_frame, textvariable=num13)
 start_station_id_entry.grid(row=1, column=3, padx=10, pady=10)
 
-create_record = FactoryDAO(CreateJourneyDao)
+create_record = FactoryDAO(CreateJourneyDao(engine=engine))
 
 def up():
 	rows = my_tree.selection()
