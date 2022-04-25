@@ -165,6 +165,9 @@ def searh():
 	my_tree.move(station_id_entry.get(), my_tree.parent(station_id_entry.get()), my_tree.index(int(station_id_entry.get())-1))
 	my_tree.selection_toggle(int(station_id_entry.get())-1)
 	prev = int(station_id_entry.get())-1
+	find_id = create_record.find_id(int(station_id_entry.get()))
+	find_label = tk.Label(search_frame, text=f"{find_id[0]}")
+	find_label.grid(row=0, column=5, padx=10, pady=10)
 
 search_frame = tk.LabelFrame(root, text="Search")
 search_frame.pack(fill="x", expand="yes", padx=20)
