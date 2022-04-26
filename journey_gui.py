@@ -159,9 +159,9 @@ def create_tree_record():
     records = create.get_query()
     for record in records:
         if count % 2 == 0:
-            my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4], record[5], record[6], record[7], record[8], record[9], record[10], record[11], record[12], record[13]), tags=('evenrow',))
+            my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0].journey_id, record[0].journey_duration, record[0].end_date, record[0].end_month, record[0].end_year, record[0].end_hour, record[0].end_minute, record[0].end_station_id, record[0].start_date, record[0].start_month, record[0].start_year, record[0].start_hour, record[0].start_minute, record[0].start_station_id), tags=('evenrow',))
         else:
-            my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4], record[5], record[6], record[7], record[8], record[9], record[10], record[11], record[12], record[13]), tags=('oddrow',))
+            my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0].journey_id, record[0].journey_duration, record[0].end_date, record[0].end_month, record[0].end_year, record[0].end_hour, record[0].end_minute, record[0].end_station_id, record[0].start_date, record[0].start_month, record[0].start_year, record[0].start_hour, record[0].start_minute, record[0].start_station_id), tags=('oddrow',))
         # increment counter
         count += 1
 
@@ -241,31 +241,31 @@ def update_record():
 	# Update record
     find_record = create.get_query_by_id(journey_id_entry.get())
     if journey_duration_entry.get() == "":
-        num1.set(f"{find_record[0][1]}")
+        num1.set(f"{find_record[0][0].journey_duration}")
     if end_date_entry.get() == "":
-        num2.set(f"{find_record[0][2]}")
+        num2.set(f"{find_record[0][0].end_date}")
     if end_month_entry.get() == "":
-        num3.set(f"{find_record[0][3]}")
+        num3.set(f"{find_record[0][0].end_month}")
     if end_year_entry.get() == "":
-        num4.set(f"{find_record[0][4]}")
+        num4.set(f"{find_record[0][0].end_year}")
     if end_hour_entry.get() == "":
-        num5.set(f"{find_record[0][5]}")
+        num5.set(f"{find_record[0][0].end_hour}")
     if end_minute_entry.get() == "":
-        num6.set(f"{find_record[0][6]}")
+        num6.set(f"{find_record[0][0].end_minute}")
     if end_station_id_entry.get() == "":
-        num7.set(f"{find_record[0][7]}")
+        num7.set(f"{find_record[0][0].end_station_id}")
     if start_date_entry.get() == "":
-        num8.set(f"{find_record[0][8]}")
+        num8.set(f"{find_record[0][0].start_date}")
     if start_month_entry.get() == "":
-        num9.set(f"{find_record[0][9]}")
+        num9.set(f"{find_record[0][0].start_month}")
     if start_year_entry.get() == "":
-        num10.set(f"{find_record[0][10]}")
+        num10.set(f"{find_record[0][0].start_year}")
     if start_hour_entry.get() == "":
-        num11.set(f"{find_record[0][11]}")
+        num11.set(f"{find_record[0][0].start_hour}")
     if start_minute_entry.get() == "":
-        num12.set(f"{find_record[0][12]}")
+        num12.set(f"{find_record[0][0].start_minute}")
     if start_station_id_entry.get() == "":
-        num13.set(f"{find_record[0][13]}")
+        num13.set(f"{find_record[0][0].start_station_id}")
 
     for item in my_tree.get_children():
         my_tree.delete(item)
@@ -288,14 +288,6 @@ def searh():
     my_tree.move(journey_id_entry.get(), my_tree.parent(journey_id_entry.get()), my_tree.index(int(journey_id_entry.get())-1))
     my_tree.selection_toggle(int(journey_id_entry.get())-1)
     prev = int(journey_id_entry.get())-1
-    find_id = create.get_query_by_id(int(journey_id_entry.get()))
-    find_label = tk.Label(search_frame, text=f"{find_id[0]}")
-    find_label.grid(row=0, column=5, padx=10, pady=10)
-
-search_frame = tk.LabelFrame(root, text="Search")
-search_frame.pack(fill="x", expand="yes", padx=20)
-search_button = tk.Button(search_frame, text="Find ", command=searh)
-search_button.grid(row=0, column=0, padx=10, pady=10)
 
 # Add Buttons
 button_frame = tk.LabelFrame(root, text="Commands")
@@ -309,6 +301,9 @@ move_up_button.grid(row=0, column=5, padx=10, pady=10)
 
 move_down_button = tk.Button(button_frame, text="Move Down", command=down)
 move_down_button.grid(row=0, column=6, padx=10, pady=10)
+
+search_button = tk.Button(button_frame, text="Find ", command=searh)
+search_button.grid(row=0, column=7, padx=10, pady=10)
 
 # Bind the treeview
 my_tree.bind("<Return>", select_record)

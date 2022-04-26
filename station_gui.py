@@ -83,11 +83,12 @@ station_name.grid(row=1, column=3, padx=10, pady=10)
 def create_tree_record():
 	count = 0
 	records = create.get_query()
+
 	for record in records:
 		if count % 2 == 0:
-			my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4]), tags=('evenrow',))
+			my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0].station_id, record[0].capacity, record[0].latitude, record[0].longitude, record[0].station_name), tags=('evenrow',))
 		else:
-			my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4]), tags=('oddrow',))
+			my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0].station_id, record[0].capacity, record[0].latitude, record[0].longitude, record[0].station_name), tags=('oddrow',))
 		# increment counter
 		count += 1
 	root.update()
@@ -150,14 +151,20 @@ def select_record(e):
 def update_record():
 	# Update record
 	find_record = create.get_query_by_id(station_id_entry.get())
+
+	id = find_record[0][0].station_id
+	capacity = find_record[0][0].capacity
+	latitude = find_record[0][0].latitude
+	longitude = find_record[0][0].longitude
+	station = find_record[0][0].station_name
 	if capcity_entry.get() == "":
-		num1.set(f"{find_record[0][1]}")
+		num1.set(f"{capacity}")
 	if latitude_entry.get() == "":
-		num2.set(f"{find_record[0][2]}")
+		num2.set(f"{latitude}")
 	if longitude_entry.get() == "":
-		num3.set(f"{find_record[0][3]}")
+		num3.set(f"{longitude}")
 	if station_name.get() == "":
-		str1.set(f"{find_record[0][4]}")
+		str1.set(f"{station}")
 	for item in my_tree.get_children():
 		my_tree.delete(item)
 	
@@ -180,14 +187,6 @@ def searh():
 	my_tree.move(station_id_entry.get(), my_tree.parent(station_id_entry.get()), my_tree.index(int(station_id_entry.get())-1))
 	my_tree.selection_toggle(int(station_id_entry.get())-1)
 	prev = int(station_id_entry.get())-1
-	find_id = create.get_query_by_id(int(station_id_entry.get()))
-	find_label = tk.Label(search_frame, text=f"{find_id[0]}")
-	find_label.grid(row=0, column=5, padx=10, pady=10)
-
-search_frame = tk.LabelFrame(root, text="Search")
-search_frame.pack(fill="x", expand="yes", padx=20)
-search_button = tk.Button(search_frame, text="Find ", command=searh)
-search_button.grid(row=0, column=0, padx=10, pady=10)
 
 # Add Buttons
 button_frame = tk.LabelFrame(root, text="Commands")
@@ -201,6 +200,9 @@ move_up_button.grid(row=0, column=5, padx=10, pady=10)
 
 move_down_button = tk.Button(button_frame, text="Move Down", command=down)
 move_down_button.grid(row=0, column=6, padx=10, pady=10)
+
+search_button = tk.Button(button_frame, text="Find ", command=searh)
+search_button.grid(row=0, column=7, padx=10, pady=10)
 
 # Bind the treeview
 my_tree.bind("<Return>", select_record)

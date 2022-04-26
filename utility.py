@@ -6,6 +6,9 @@ PATH_STATION_CSV = "data/stations.csv"
 JOURNEY_TABLE_NAME = Journey.__tablename__
 STATION_TABLE_NAME = Station.__tablename__
 
+STATION_TABLE = Station
+JOURNEY_TABLE = Journey
+
 JOURNEY_COLUMN = [
             "journey_id",
             "journey_duration",
