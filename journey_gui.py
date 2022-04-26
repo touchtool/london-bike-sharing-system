@@ -2,14 +2,14 @@ import tkinter as tk
 from tkinter import ttk
 from utility import *
 
-from table.bicycle_dao import *
+from persistence.bicycle_dao import *
 
 root = tk.Tk()
 width = root.winfo_screenwidth()
 height = root.winfo_screenheight()
 root.title("Bicycle sharing system")
 
-create_record = FactoryDAO(JOURNEY_TABLE_NAME)
+create_record = FactoryDao(JOURNEY_TABLE_NAME)
 create_record.load_data(file_name=PATH_JOURNEY_CSV, columns=JOURNEY_COLUMN, tablename=JOURNEY_TABLE_NAME)
 create_record.load_data(file_name=PATH_STATION_CSV, columns=STATION_COLUMN, tablename=STATION_TABLE_NAME)
 create = create_record.get_create_dao()

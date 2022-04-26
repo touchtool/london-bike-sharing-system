@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 
 from utility import *
 from sqlalchemy import create_engine, select, update
-from sqlalchemy.orm import sessionmaker, session
+from sqlalchemy.orm import sessionmaker
 from table.bicycle_load import ProxyCreateTable
 
-class ICreateDAO(ABC):
+class ICreateDao(ABC):
     def __init__(self, session):
         self.session = session
 
@@ -21,7 +21,7 @@ class ICreateDAO(ABC):
     def update_by_id(self):
         pass
 
-class CreateStationDao(ICreateDAO):
+class CreateStationDao(ICreateDao):
     def get_query(self):
         statement = select(Station)
         return self.session.execute(statement).fetchall()
@@ -50,7 +50,7 @@ class CreateStationDao(ICreateDAO):
         return STATION_TABLE_NAME
 
 
-class CreateJourneyDao(ICreateDAO):
+class CreateJourneyDao(ICreateDao):
     def get_query(self):
         statement = select(Journey)
         return self.session.execute(statement).fetchall()
@@ -99,7 +99,7 @@ class CreateJourneyDao(ICreateDAO):
     def __str__(self) -> str:
         return JOURNEY_TABLE_NAME
 
-class FactoryDAO():
+class FactoryDao():
     def __init__(self, type: str):
         self._engine = create_engine("sqlite:///lend_bicycle.db")
         self._sessionmake = sessionmaker(bind=self._engine)
