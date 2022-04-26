@@ -8,10 +8,6 @@ from table.bicycle_load import ProxyCreateTable
 class ICreateDAO(ABC):
     def __init__(self, session):
         self.session = session
-    
-    # @property
-    # def commit(self):
-    #     return self.commit()
 
     @abstractmethod
     def get_query(self):
