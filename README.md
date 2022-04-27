@@ -33,3 +33,8 @@ then click button Upload Record for get the query
 The table will update the item
 
 ![update5](/image/update5.png)<br/>  
+
+## Link
+ - [Wiki](https://github.com/touchtool/london-bike-sharing-system/wiki)  
+ - [UML Diagram](https://github.com/touchtool/london-bike-sharing-system/wiki/UML-Diagram)  
+ - [Package Diagram](https://github.com/touchtool/london-bike-sharing-system/wiki/Package-Diagram)  
