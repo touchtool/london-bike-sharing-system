@@ -34,7 +34,11 @@ The table will update the item
 
 ![update5](/image/update5.png)<br/>  
 
+# Web service API
+ - [Web service](https://github.com/touchtool/london-bike-sharing-system/wiki/Web-service-API)
+ 
 ## Link
  - [Wiki](https://github.com/touchtool/london-bike-sharing-system/wiki)  
  - [UML Diagram](https://github.com/touchtool/london-bike-sharing-system/wiki/UML-Diagram)  
  - [Package Diagram](https://github.com/touchtool/london-bike-sharing-system/wiki/Package-Diagram)  
+ - [Web service](https://github.com/touchtool/london-bike-sharing-system/wiki/Web-service-API)
